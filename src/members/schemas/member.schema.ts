@@ -3,7 +3,7 @@ import { Document, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Member extends Document {
-    @Prop({ required: true, trim: true, index: 'text' })
+    @Prop({ required: true, trim: true })
     fullName: string;
 
     @Prop({ required: true, enum: ['MALE', 'FEMALE', 'UNKNOWN'] })
