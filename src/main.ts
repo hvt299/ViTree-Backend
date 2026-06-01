@@ -12,6 +12,7 @@ async function bootstrap() {
     .setTitle('ViTree API')
     .setDescription('Tài liệu API cho hệ thống quản lý gia phả ViTree')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
