@@ -7,6 +7,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MembersModule } from './members/members.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -28,6 +29,8 @@ import { MembersModule } from './members/members.module';
     }]),
 
     MembersModule,
+
+    UploadModule,
   ],
 
   controllers: [AppController],
