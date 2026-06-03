@@ -80,7 +80,7 @@ export class MembersService {
     }
 
     const updatedMember = await this.memberModel
-      .findByIdAndUpdate(id, updateMemberDto, { new: true })
+      .findByIdAndUpdate(id, updateMemberDto, { returnDocument: 'after' })
       .exec();
 
     if (!updatedMember) throw new NotFoundException(`Không tìm thấy thành viên với ID: ${id}`);
