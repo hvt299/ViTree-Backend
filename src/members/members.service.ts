@@ -9,15 +9,19 @@ import { UpdateMemberDto } from './dto/update-member.dto';
 export class MembersService {
   constructor(@InjectModel(Member.name) private memberModel: Model<Member>) { }
 
-  private async validateRelations(fatherId?: string, motherId?: string, spouseIds?: string[]) {
-    if (fatherId) {
-      const father = await this.memberModel.findById(fatherId).exec();
-      if (!father) throw new NotFoundException(`Không tìm thấy Cha với ID: ${fatherId}`);
+  private async validateRelations(fatherIds?: string[], motherIds?: string[], spouseIds?: string[]) {
+    if (fatherIds && fatherIds.length > 0) {
+      const fathers = await this.memberModel.find({ _id: { $in: fatherIds } }).exec();
+      if (fathers.length !== fatherIds.length) {
+        throw new NotFoundException('Một hoặc nhiều ID Cha không tồn tại trong hệ thống');
+      }
     }
 
-    if (motherId) {
-      const mother = await this.memberModel.findById(motherId).exec();
-      if (!mother) throw new NotFoundException(`Không tìm thấy Mẹ với ID: ${motherId}`);
+    if (motherIds && motherIds.length > 0) {
+      const mothers = await this.memberModel.find({ _id: { $in: motherIds } }).exec();
+      if (mothers.length !== motherIds.length) {
+        throw new NotFoundException('Một hoặc nhiều ID Mẹ không tồn tại trong hệ thống');
+      }
     }
 
     if (spouseIds && spouseIds.length > 0) {
@@ -30,8 +34,8 @@ export class MembersService {
 
   async create(createMemberDto: CreateMemberDto): Promise<Member> {
     await this.validateRelations(
-      createMemberDto.fatherId,
-      createMemberDto.motherId,
+      createMemberDto.fatherIds,
+      createMemberDto.motherIds,
       createMemberDto.spouseIds
     );
 
@@ -67,10 +71,10 @@ export class MembersService {
   async update(id: string, updateMemberDto: UpdateMemberDto): Promise<Member> {
     if (!Types.ObjectId.isValid(id)) throw new BadRequestException('ID không hợp lệ');
 
-    if (updateMemberDto.fatherId || updateMemberDto.motherId || updateMemberDto.spouseIds) {
+    if (updateMemberDto.fatherIds || updateMemberDto.motherIds || updateMemberDto.spouseIds) {
       await this.validateRelations(
-        updateMemberDto.fatherId,
-        updateMemberDto.motherId,
+        updateMemberDto.fatherIds,
+        updateMemberDto.motherIds,
         updateMemberDto.spouseIds
       );
     }
