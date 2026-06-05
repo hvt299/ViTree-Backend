@@ -39,14 +39,6 @@ export class MembersController {
     );
   }
 
-  @Get('search')
-  @ApiOperation({ summary: 'Tìm kiếm thành viên theo tên' })
-  @ApiQuery({ name: 'q', required: true, type: String, description: 'Từ khóa tìm kiếm' })
-  @ApiResponse({ status: 200, description: 'Trả về danh sách kết quả tìm kiếm (tối đa 20).' })
-  search(@Query('q') keyword: string) {
-    return this.membersService.search(keyword);
-  }
-
   @Get(':id')
   @ApiOperation({ summary: 'Lấy thông tin chi tiết một thành viên' })
   @ApiResponse({ status: 200, description: 'Trả về chi tiết thành viên.' })

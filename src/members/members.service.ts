@@ -93,14 +93,4 @@ export class MembersService {
     const result = await this.memberModel.findByIdAndDelete(id).exec();
     if (!result) throw new NotFoundException(`Không tìm thấy thành viên với ID: ${id}`);
   }
-
-  async search(keyword: string): Promise<Member[]> {
-    if (!keyword) return [];
-
-    return this.memberModel
-      .find({ $text: { $search: keyword } })
-      .sort({ score: { $meta: 'textScore' } })
-      .limit(20)
-      .exec();
-  }
 }

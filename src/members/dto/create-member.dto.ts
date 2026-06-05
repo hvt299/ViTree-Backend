@@ -52,5 +52,4 @@ export class CreateMemberDto {
 
     @ApiPropertyOptional({ example: 1 }) @IsOptional() @IsNumber() orderInFamily?: number;
     @ApiProperty({ example: 5 }) @IsNumber() generation: number;
-    @ApiPropertyOptional({ example: 'CHI_TRUONG' }) @IsOptional() @IsString() branchId?: string;
 }

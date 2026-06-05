@@ -50,13 +50,10 @@ export class Member extends Document {
     @Prop({ default: 1 }) orderInFamily?: number;
 
     @Prop({ required: true }) generation: number;
-
-    @Prop({ default: null }) branchId?: string;
 }
 
 export const MemberSchema = SchemaFactory.createForClass(Member);
 
-MemberSchema.index({ fullName: 'text' });
 MemberSchema.index({ generation: 1 });
 
 MemberSchema.index({ fatherIds: 1, orderInFamily: 1 });
