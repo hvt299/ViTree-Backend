@@ -1,69 +1,55 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsBoolean, IsOptional, IsEnum, IsNumber, IsArray, IsMongoId } from 'class-validator';
+import { IsArray, IsBoolean, IsDateString, IsEnum, IsMongoId, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { Gender, LifeStatus } from '../schemas/member.schema';
+
+export class LunarDeathAnniversaryDto {
+    @ApiPropertyOptional({ example: 10 }) @IsOptional() @IsNumber() day?: number;
+    @ApiPropertyOptional({ example: 3 }) @IsOptional() @IsNumber() month?: number;
+    @ApiPropertyOptional({ example: false }) @IsOptional() @IsBoolean() isLeapMonth?: boolean;
+    @ApiPropertyOptional({ example: 'Mùng 10 tháng 3 âm lịch' }) @IsOptional() @IsString() displayText?: string;
+}
 
 export class CreateMemberDto {
-    @ApiProperty({ example: 'Nguyễn Văn A', description: 'Họ và tên thành viên' })
-    @IsString()
-    fullName: string;
+    @ApiProperty({ example: 'Nguyễn Văn A' }) @IsString() fullName: string;
+    @ApiPropertyOptional({ example: 'Tử Đằng' }) @IsOptional() @IsString() tuName?: string;
 
-    @ApiProperty({ example: 'MALE', enum: ['MALE', 'FEMALE', 'UNKNOWN'] })
-    @IsEnum(['MALE', 'FEMALE', 'UNKNOWN'])
-    gender: string;
+    @ApiProperty({ enum: Gender, example: Gender.MALE }) @IsEnum(Gender) gender: Gender;
+    @ApiPropertyOptional({ enum: LifeStatus, example: LifeStatus.ALIVE }) @IsOptional() @IsEnum(LifeStatus) status?: LifeStatus;
 
-    @ApiPropertyOptional({ example: 'https://...', description: 'Link ảnh đại diện' })
+    @ApiPropertyOptional() @IsOptional() @IsString() avatarUrl?: string;
+    @ApiPropertyOptional() @IsOptional() @IsString() shortNote?: string;
+    @ApiPropertyOptional({ example: false, description: 'Vô tự' }) @IsOptional() @IsBoolean() isHeirless?: boolean;
+
+    @ApiPropertyOptional({ example: '1950-01-01' }) @IsOptional() @IsDateString() birthDate?: string;
+    @ApiPropertyOptional({ example: '2020-05-10' }) @IsOptional() @IsDateString() deathDate?: string;
+
+    @ApiPropertyOptional({ type: LunarDeathAnniversaryDto })
     @IsOptional()
-    @IsString()
-    avatarUrl?: string;
+    @ValidateNested()
+    @Type(() => LunarDeathAnniversaryDto)
+    lunarDeathAnniversary?: LunarDeathAnniversaryDto;
 
-    @ApiPropertyOptional({ example: 'Trưởng họ đời thứ 5' })
+    @ApiPropertyOptional({ example: 'Nghĩa trang gia tộc' }) @IsOptional() @IsString() burialPlace?: string;
+
+    @ApiPropertyOptional({ type: [String], description: 'Danh sách ID Cha' })
     @IsOptional()
-    @IsString()
-    shortNote?: string;
+    @IsArray()
+    @IsMongoId({ each: true })
+    fatherIds?: string[];
 
-    @ApiProperty({ example: true, description: 'Còn sống hay đã mất' })
-    @IsBoolean()
-    isAlive: boolean;
-
-    @ApiPropertyOptional({ example: '1950-01-01', description: 'Ngày sinh' })
+    @ApiPropertyOptional({ type: [String], description: 'Danh sách ID Mẹ (Hỗ trợ case không rõ mẹ)' })
     @IsOptional()
-    @IsString()
-    birthDate?: string;
+    @IsArray()
+    @IsMongoId({ each: true })
+    motherIds?: string[];
 
-    @ApiPropertyOptional({ example: '2020-05-10', description: 'Ngày mất (nếu có)' })
-    @IsOptional()
-    @IsString()
-    deathDate?: string;
-
-    @ApiPropertyOptional({ example: 'Nghĩa trang gia tộc', description: 'Nơi an táng' })
-    @IsOptional()
-    @IsString()
-    burialPlace?: string;
-
-    @ApiPropertyOptional({ example: '660a1b2c3d4e5f6a7b8c9d01', description: 'ID của Cha' })
-    @IsOptional()
-    @IsMongoId()
-    fatherId?: string;
-
-    @ApiPropertyOptional({ example: '660a1b2c3d4e5f6a7b8c9d02', description: 'ID của Mẹ' })
-    @IsOptional()
-    @IsMongoId()
-    motherId?: string;
-
-    @ApiPropertyOptional({
-        example: ['660a1b2c3d4e5f6a7b8c9d03'],
-        description: 'Danh sách ID Vợ/Chồng (Mảng)'
-    })
+    @ApiPropertyOptional({ type: [String] })
     @IsOptional()
     @IsArray()
     @IsMongoId({ each: true })
     spouseIds?: string[];
 
-    @ApiPropertyOptional({ example: 1, description: 'Thứ tự trong gia đình (1: Anh/Chị cả, 2: Thứ hai...)' })
-    @IsOptional()
-    @IsNumber()
-    orderInFamily?: number;
-
-    @ApiProperty({ example: 5, description: 'Thế hệ thứ mấy trong họ' })
-    @IsNumber()
-    generation: number;
+    @ApiPropertyOptional({ example: 1 }) @IsOptional() @IsNumber() orderInFamily?: number;
+    @ApiProperty({ example: 5 }) @IsNumber() generation: number;
 }
