@@ -210,8 +210,6 @@ Hệ thống đã được áp dụng các biện pháp can thiệp mức phân 
 
 Tài liệu tương tác đầy đủ được cung cấp trực tiếp tại: `http://localhost:3001/api/docs`.
 
-![Tài liệu Swagger OpenAPI](public/demo/swagger-docs.svg)
-
 ### Xác thực &amp; Quản trị Tài khoản (`/api/auth`, `/api/users`)
 * `POST /api/auth/login`: Xác thực thông tin tài khoản, cấp phát mã `access_token` định dạng JWT.
 * `POST /api/users/register`: Khởi tạo tài khoản quản trị viên ban đầu với mật khẩu băm Bcrypt.
@@ -336,8 +334,6 @@ ViTree-Backend/
 ├── test/                          # Bộ kiểm thử tích hợp E2E
 │   ├── app.e2e-spec.ts
 │   └── jest-e2e.json
-├── public/                        # Thư mục chứa tài nguyên tĩnh và tài liệu đồ họa
-│   └── demo/                      # Tệp ảnh chụp màn hình minh họa Swagger
 ├── Dockerfile                     # Cấu hình container Docker
 ├── nest-cli.json                  # Cấu hình NestJS CLI
 ├── package.json                   # Danh mục thư viện phụ thuộc và bản vá bảo mật
